@@ -1,0 +1,140 @@
+<!doctype html>
+
+<html>
+<head>
+	<meta charset="utf8" />
+	<style>
+		body {
+			background-color: black;
+			color: #ffffaa;
+			font-family: "Courier New";
+			font-size: 1em;
+		}
+		#container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 90vh;
+		}
+		.note {
+			border-radius: 5px 5px;
+			max-width: 300px;
+			background-color: yellow;
+			color: black;
+			margin-left: auto;
+			margin-right: auto;
+			font-family: "Comic Sans MS";
+			padding-top: 10px;
+			padding-bottom: 10px;
+		}
+		#out {
+			text-align: center;
+			max-width: 500px;
+			margin-bottom: 20px;
+		}
+		#inx {
+			color: #fff;
+			background-color: black;
+			font-family: "Courier New";
+			border: DASHED  1px #00ff00;
+			font-size: 1em;
+			font-weight: bold;
+			padding: 3px;
+		}
+	</style>
+</head>
+
+<body>
+<div id="progress">
+</div>
+<div id="container">
+<div id="out">
+</div>
+<div>
+<form id="f">
+<input type="textfield" id="inx" autocomplete="off" />
+<!--<input type="submit" />-->
+</form>
+</div>
+</div>
+
+<script>
+
+var progress = document.getElementById("progress");
+var out = document.getElementById("out");
+var inx = document.getElementById("inx");
+var f = document.getElementById("f");
+
+
+function Task(question, answer) {
+	this.question = question;
+	this.answer = answer;
+}
+
+var task = [];
+task.push(new Task("Vad är V i <strong>10000V</strong>",["bokstav","versal","en bokstav","en versal"]));
+task.push(new Task("&nbsp;&nbsp;&nbsp;T&nbsp;T&nbsp;T&nbsp;&nbsp;&nbsp;<br />"+
+"&nbsp;T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T&nbsp;<br />"+
+"T&nbsp;&nbsp;&nbsp;O&nbsp;R&nbsp;&nbsp;&nbsp;T<br />"+
+"&nbsp;T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T&nbsp;<br />"+ 
+"&nbsp;&nbsp;&nbsp;T&nbsp;T&nbsp;T&nbsp;&nbsp;&nbsp;",["orientering"]));
+task.push(new Task("En lampa med resistensen 3&Omega; kopplas till ett AA batteri. Batteriet är specialdesignat och kan leverera upp till 5 ampere. Ledningen har försumbar resistens. Hur stor effekt utvecklas i lampan?",["0,75w","0.75","750","750mw","750 mw","750 milliwatt","750milliwatt","0.75w","0.75 watt","0.75 w","0,75 watt","0,75 w"]));
+task.push(new Task("Mr. Barnaby hade kört fast i sökande efter the murderer. Man hade DNA-spår från en man, men saknade look och motiv. Förbrytaren hade dock lämnat en cryptic note:<p class=\"note\">Uppslagsverk + &deg;</p>Vad hette brottslingen?",["nedim"]));
+task.push(new Task("x2000 + 1000 = 12000",["5.5","5,5"]));
+task.push(new Task("Pernilla jobbar på SSAB. Hon smälter spårskenor av stål som skickas längs malmbanan till Narvik som i sin tur levereras till Tyskland. Kina är en av världens största stålexportörer. Vilken är världens största ekonomi?",["usa","amerika","u.s.a."]));
+task.push(new Task("Ett barn har gjort sig illa i ett slagsmål som spårat ur. På akuten ordinerar läkaren 1,92g paracetamol, som ska ges genom flytande alvedon. Hur många centiliter ska ges?",["8","8 cl","8cl"]));
+task.push(new Task("Per Rongedahl fyllde 58 år igår. Nästa år fyller Per Rongedahl 60 år. När fyller Per Rongedahl år? [mm&#8209;dd]?",["12-31"]));
+task.push(new Task("Ta reda på hur mycket ett kilo järn väger.",["1","1kg","1 kg"]));
+task.push(new Task("Vad är det för skillnad på en 60-årig elgrosist och en nyfödd gris?",["60 år","60år","sextio år","sexti år"]));
+
+
+var current = 0;
+
+function makered() {
+	inx.style.color="red";
+	setTimeout(function() {
+		inx.style.color="#fff";
+	},2000);
+}
+
+function update() {
+	out.innerHTML = task[current].question;
+	progress.innerHTML = "("+(current+1)+"/"+task.length+")";
+	inx.value = "";
+}
+
+function checkAnswer(evt) {
+	evt.preventDefault();
+	var ans = inx.value.toLowerCase().trim();
+	if(ans.length == 0) {
+		return;
+	}
+	if(task[current].answer.indexOf(ans)>-1) {
+		current++;
+		if(current < task.length) {
+			update();
+		} else {
+			progress.innerHTML = "GRATTIS!";
+			progress.style.color="#0f0";
+			out.style.color="#0f0";
+			out.innerHTML = "Gå och titta vad som ligger under Martins säng.";
+			inx.style.display = "none";
+		}
+	} else {
+		makered();
+	}
+}
+
+f.addEventListener("submit",checkAnswer);
+document.addEventListener("click", function() {
+	inx.focus();
+});
+
+update();
+inx.focus();
+
+</script>
+</body>
+
+</html>
